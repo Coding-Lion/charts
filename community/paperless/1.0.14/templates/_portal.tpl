@@ -6,14 +6,14 @@ metadata:
   name: portal
 data:
   path: /
-  port: {{ .Values.giteaNetwork.webPort | quote }}
-  {{ if or (hasPrefix "https://" .Values.giteaNetwork.rootURL) .Values.giteaNetwork.certificateID }}
+  port: {{ .Values.paperlessNetwork.webPort | quote }}
+  {{ if or (hasPrefix "https://" .Values.paperlessNetwork.rootURL) .Values.paperlessNetwork.certificateID }}
   protocol: https
   {{ else }}
   protocol: http
   {{ end }}
   {{- $host := "$node_ip" -}}
-  {{ with .Values.giteaNetwork.rootURL }} {{/* Trim protocol and trailing slash */}}
+  {{ with .Values.paperlessNetwork.rootURL }} {{/* Trim protocol and trailing slash */}}
     {{ $host = (. | trimPrefix "https://" | trimPrefix "http://" | trimSuffix "/") }}
     {{ $host = mustRegexReplaceAll "(.*):[0-9]+" $host "${1}" }}
   {{ end }}

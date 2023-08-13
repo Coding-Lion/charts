@@ -1,6 +1,6 @@
 runAsContext:
-  - userName: gitea
-    groupName: gitea
+  - userName: paperless
+    groupName: paperless
     gid: 1000
     uid: 1000
     description: Gitea can run as a non-root user, currently only 1000 works.

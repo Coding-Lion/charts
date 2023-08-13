@@ -22,7 +22,7 @@ portals:
 
 questions:
 
-  - variable: giteaConfig
+  - variable: paperlessConfig
     label: ""
     group: Gitea Configuration
     schema:
@@ -51,7 +51,7 @@ questions:
                         type: string
                         required: true
 
-  - variable: giteaRunAs
+  - variable: paperlessRunAs
     label: ""
     group: User and Group Configuration
     schema:
@@ -81,7 +81,7 @@ questions:
             default: 1000
             required: true
 
-  - variable: giteaNetwork
+  - variable: paperlessNetwork
     label: ""
     group: Network Configuration
     schema:
@@ -129,7 +129,7 @@ questions:
             $ref:
               - "definitions/certificate"
 
-  - variable: giteaStorage
+  - variable: paperlessStorage
     label: ""
     group: Storage Configuration
     schema:
@@ -173,9 +173,9 @@ questions:
                   show_if: [["type", "=", "hostPath"]]
                   immutable: true
                   required: true
-        - variable: config
-          label: Gitea Configuration Storage
-          description: The path to store Gitea configuration storage.
+        - variable: media
+          label: media
+          description: media
           schema:
             type: dict
             attrs:
@@ -201,7 +201,83 @@ questions:
                   required: true
                   hidden: true
                   immutable: true
-                  default: config
+                  default: media
+                  $ref:
+                    - "normalize/ixVolume"
+              - variable: hostPath
+                label: Host Path
+                schema:
+                  type: hostpath
+                  show_if: [["type", "=", "hostPath"]]
+                  immutable: true
+                  required: true
+        - variable: export
+          label: export
+          description: export
+          schema:
+            type: dict
+            attrs:
+              - variable: type
+                label: Type
+                description: |
+                  ixVolume: Is dataset created automatically by the system.</br>
+                  Host Path: Is a path that already exists on the system.
+                schema:
+                  type: string
+                  required: true
+                  default: ixVolume
+                  enum:
+                    - value: hostPath
+                      description: Host Path (Path that already exists on the system)
+                    - value: ixVolume
+                      description: ixVolume (Dataset created automatically by the system)
+              - variable: datasetName
+                label: Dataset Name
+                schema:
+                  type: string
+                  show_if: [["type", "=", "ixVolume"]]
+                  required: true
+                  hidden: true
+                  immutable: true
+                  default: export
+                  $ref:
+                    - "normalize/ixVolume"
+              - variable: hostPath
+                label: Host Path
+                schema:
+                  type: hostpath
+                  show_if: [["type", "=", "hostPath"]]
+                  immutable: true
+                  required: true
+        - variable: consume
+          label: consume
+          description: consume
+          schema:
+            type: dict
+            attrs:
+              - variable: type
+                label: Type
+                description: |
+                  ixVolume: Is dataset created automatically by the system.</br>
+                  Host Path: Is a path that already exists on the system.
+                schema:
+                  type: string
+                  required: true
+                  default: ixVolume
+                  enum:
+                    - value: hostPath
+                      description: Host Path (Path that already exists on the system)
+                    - value: ixVolume
+                      description: ixVolume (Dataset created automatically by the system)
+              - variable: datasetName
+                label: Dataset Name
+                schema:
+                  type: string
+                  show_if: [["type", "=", "ixVolume"]]
+                  required: true
+                  hidden: true
+                  immutable: true
+                  default: consume
                   $ref:
                     - "normalize/ixVolume"
               - variable: hostPath

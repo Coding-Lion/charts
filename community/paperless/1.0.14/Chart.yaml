@@ -1,22 +1,22 @@
-name: gitea
-description: Gitea - Git with a cup of tea
+name: paperless
+description: Paperless
 annotations:
-  title: Gitea
+  title: Paperless
 type: application
 version: 1.0.14
 apiVersion: v2
 appVersion: '1.19.0'
 kubeVersion: '>=1.16.0-0'
 maintainers:
-  - name: truenas
-    url: https://www.truenas.com/
+  - name: CodingLion
+    url: https://www.lesch.dev/
     email: dev@ixsystems.com
 dependencies:
   - name: common
     repository: file://../../../common
     version: 1.0.12
-home: https://gitea.io/en-us
-icon: https://gitea.com/assets/img/logo.svg
+home: https://github.com/paperless-ngx/paperless-ngx
+icon: https://raw.githubusercontent.com/paperless-ngx/paperless-ngx/dev/resources/logo/web/svg/square.svg
 sources:
   - https://gitea.io/en-us
   - https://github.com/truenas/charts/tree/master/community/gitea

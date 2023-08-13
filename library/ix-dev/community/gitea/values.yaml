@@ -11,7 +11,7 @@ resources:
 giteaConfig:
   additionalEnvs: []
 
-giteaNetwork:
+paperlessNetwork:
   webPort: 30008
   sshPort: 30009
   certificateID: null
@@ -25,7 +25,7 @@ giteaRunAs:
   user: 1000
   group: 1000
 
-giteaStorage:
+paperlessStorage:
   data:
     type: ixVolume
     datasetName: data

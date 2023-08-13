@@ -1,18 +1,18 @@
 image:
-  repository: gitea/gitea
+  repository: ghcr.io/paperless-ngx/paperless-ngx
   pullPolicy: IfNotPresent
-  tag: 1.19.0-rootless
+  tag: latest
 
 resources:
   limits:
     cpu: 4000m
     memory: 8Gi
 
-giteaConfig:
+paperlessConfig:
   additionalEnvs: []
 
-giteaNetwork:
-  webPort: 30008
+paperlessNetwork:
+  webPort: 8000
   sshPort: 30009
   certificateID: null
   rootURL: ""
@@ -21,15 +21,21 @@ giteaNetwork:
 # FIXME: Currently only user 1000 works.
 # Any other uid is not mapped to the internal "git" user.
 # https://github.com/go-gitea/gitea/issues/23632
-giteaRunAs:
+paperlessRunAs:
   user: 1000
   group: 1000
 
-giteaStorage:
+paperlessStorage:
   data:
     type: ixVolume
     datasetName: data
-  config:
+  media:
+    type: ixVolume
+    datasetName: media
+  export:
+    type: ixVolume
+    datasetName: export
+  consume:
     type: ixVolume
     datasetName: config
   pgData:

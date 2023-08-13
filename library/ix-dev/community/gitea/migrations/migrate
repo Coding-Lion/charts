@@ -5,7 +5,7 @@ import sys
 
 
 def migrate(values):
-    storageKey = 'giteaStorage'
+    storageKey = 'paperlessStorage'
     storages = ['data', 'config', 'pgData', 'pgBackup']
 
 

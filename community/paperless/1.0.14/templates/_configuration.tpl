@@ -7,8 +7,6 @@
   {{- $fullname := (include "ix.v1.common.lib.chart.names.fullname" $) -}}
 
   {{- $dbHost := (printf "%s-postgres" $fullname) -}}
-  {{- $dbUser := "gitea" -}}
-  {{- $dbName := "gitea" -}}
 
   {{- $dbPass := (randAlphaNum 32) -}}
   {{- with (lookup "v1" "Secret" .Release.Namespace (printf "%s-postgres-creds" $fullname)) -}}
@@ -20,35 +18,22 @@ secret:
   postgres-creds:
     enabled: true
     data:
-      POSTGRES_USER: {{ $dbUser }}
-      POSTGRES_DB: {{ $dbName }}
-      POSTGRES_PASSWORD: {{ $dbPass }}
+      POSTGRES_USER: paperless
+      POSTGRES_DB: paperless
+      POSTGRES_PASSWORD: paperless
       POSTGRES_HOST: {{ $dbHost }}
       POSTGRES_URL: {{ $dbURL }}
 
   gitea-creds:
     enabled: true
     data:
-      GITEA__database__DB_TYPE: postgres
-      GITEA__database__PASSWD: {{ $dbPass }}
-      GITEA__database__HOST: {{ $dbHost }}
-      GITEA__database__NAME: {{ $dbName }}
-      GITEA__database__USER: {{ $dbUser }}
+      PAPERLESS_DBHOST: {{ $dbHost }}
 configmap:
   gitea-config:
     enabled: true
     data:
-      {{ $protocol := "http" }}
-      GITEA__server__HTTP_PORT: {{ .Values.paperlessNetwork.webPort | quote }}
-      GITEA__server__SSH_PORT: {{ .Values.paperlessNetwork.sshPort | quote }}
-      GITEA__server__SSH_LISTEN_PORT: {{ .Values.paperlessNetwork.sshPort | quote }}
-      GITEA__server__ROOT_URL: {{ .Values.paperlessNetwork.rootURL | quote }}
-      {{ if .Values.paperlessNetwork.certificateID }}
-      {{ $protocol = "https" }}
-      GITEA__server__CERT_FILE: /etc/certs/gitea/public.crt
-      GITEA__server__KEY_FILE: /etc/certs/gitea/private.key
-      {{ end }}
-      GITEA__server__PROTOCOL: {{ $protocol }}
+      PAPERLESS_REDIS: redis://broker:6379
+      
 
 {{ with .Values.paperlessNetwork.certificateID }}
 scaleCertificate:

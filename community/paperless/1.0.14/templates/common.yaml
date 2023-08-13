@@ -4,6 +4,7 @@
 {{- $_ := mustMergeOverwrite .Values (include "gitea.configuration" $ | fromYaml) -}}
 {{- $_ := mustMergeOverwrite .Values (include "gitea.workload" $ | fromYaml) -}}
 {{- $_ := mustMergeOverwrite .Values (include "postgres.workload" $ | fromYaml) -}}
+{{- $_ := mustMergeOverwrite .Values (include "redis.workload" $ | fromYaml) -}}
 
 {{/* Create the configmap for portal manually*/}}
 {{- include "gitea.portal" $ -}}

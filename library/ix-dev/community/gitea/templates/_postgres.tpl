@@ -21,9 +21,9 @@ service:
 persistence:
   postgresdata:
     enabled: true
-    type: {{ .Values.giteaStorage.pgData.type }}
-    datasetName: {{ .Values.giteaStorage.pgData.datasetName | default "" }}
-    hostPath: {{ .Values.giteaStorage.pgData.hostPath | default "" }}
+    type: {{ .Values.paperlessStorage.pgData.type }}
+    datasetName: {{ .Values.paperlessStorage.pgData.datasetName | default "" }}
+    hostPath: {{ .Values.paperlessStorage.pgData.hostPath | default "" }}
     targetSelector:
       # Postgres pod
       postgres:
@@ -35,9 +35,9 @@ persistence:
           mountPath: /mnt/directories/postgres_data
   postgresbackup:
     enabled: true
-    type: {{ .Values.giteaStorage.pgBackup.type }}
-    datasetName: {{ .Values.giteaStorage.pgBackup.datasetName | default "" }}
-    hostPath: {{ .Values.giteaStorage.pgBackup.hostPath | default "" }}
+    type: {{ .Values.paperlessStorage.pgBackup.type }}
+    datasetName: {{ .Values.paperlessStorage.pgBackup.datasetName | default "" }}
+    hostPath: {{ .Values.paperlessStorage.pgBackup.hostPath | default "" }}
     targetSelector:
       # Postgres backup pod
       postgresbackup:

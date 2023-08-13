@@ -5,21 +5,21 @@ workload:
     primary: true
     type: Deployment
     podSpec:
-      hostNetwork: {{ .Values.giteaNetwork.hostNetwork }}
+      hostNetwork: {{ .Values.paperlessNetwork.hostNetwork }}
       containers:
         gitea:
           enabled: true
           primary: true
           imageSelector: image
           securityContext:
-            runAsUser: {{ .Values.giteaRunAs.user }}
-            runAsGroup: {{ .Values.giteaRunAs.group }}
+            runAsUser: {{ .Values.paperlessRunAs.user }}
+            runAsGroup: {{ .Values.paperlessRunAs.group }}
           envFrom:
             - secretRef:
                 name: gitea-creds
             - configMapRef:
                 name: gitea-config
-          {{ with .Values.giteaConfig.additionalEnvs }}
+          {{ with .Values.paperlessConfig.additionalEnvs }}
           envList:
             {{ range $env := . }}
             - name: {{ $env.name }}
@@ -28,28 +28,28 @@ workload:
           {{ end }}
           probes:
             {{ $protocol := "http" }}
-            {{ if .Values.giteaNetwork.certificateID }}
+            {{ if .Values.paperlessNetwork.certificateID }}
               {{ $protocol = "https" }}
             {{ end }}
             liveness:
               enabled: true
               type: {{ $protocol }}
               path: /api/healthz
-              port: {{ .Values.giteaNetwork.webPort }}
+              port: {{ .Values.paperlessNetwork.webPort }}
             readiness:
               enabled: true
               type: {{ $protocol }}
               path: /api/healthz
-              port: {{ .Values.giteaNetwork.webPort }}
+              port: {{ .Values.paperlessNetwork.webPort }}
             startup:
               enabled: true
               type: {{ $protocol }}
               path: /api/healthz
-              port: {{ .Values.giteaNetwork.webPort }}
+              port: {{ .Values.paperlessNetwork.webPort }}
       initContainers:
       {{- include "ix.v1.common.app.permissions" (dict "containerName" "01-permissions"
-                                                        "UID" .Values.giteaRunAs.user
-                                                        "GID" .Values.giteaRunAs.group
+                                                        "UID" .Values.paperlessRunAs.user
+                                                        "GID" .Values.paperlessRunAs.group
                                                         "type" "install") | nindent 8 }}
       {{- include "ix.v1.common.app.postgresWait" (dict "name" "postgres-wait"
                                                         "secretName" "postgres-creds") | nindent 8 }}
@@ -64,39 +64,56 @@ service:
       webui:
         enabled: true
         primary: true
-        port: {{ .Values.giteaNetwork.webPort }}
-        nodePort: {{ .Values.giteaNetwork.webPort }}
-        targetSelector: gitea
-      ssh:
-        enabled: true
-        port: {{ .Values.giteaNetwork.sshPort }}
-        nodePort: {{ .Values.giteaNetwork.sshPort }}
+        port: {{ .Values.paperlessNetwork.webPort }}
+        nodePort: {{ .Values.paperlessNetwork.webPort }}
         targetSelector: gitea
 
 {{/* Persistence */}}
 persistence:
   data:
     enabled: true
-    type: {{ .Values.giteaStorage.data.type }}
-    datasetName: {{ .Values.giteaStorage.data.datasetName | default "" }}
-    hostPath: {{ .Values.giteaStorage.data.hostPath | default "" }}
+    type: {{ .Values.paperlessStorage.data.type }}
+    datasetName: {{ .Values.paperlessStorage.data.datasetName | default "" }}
+    hostPath: {{ .Values.paperlessStorage.data.hostPath | default "" }}
     targetSelector:
       gitea:
         gitea:
-          mountPath: /var/lib/gitea
+          mountPath: /usr/src/paperless/data
         01-permissions:
           mountPath: /mnt/directories/data
-  config:
+  media:
     enabled: true
-    type: {{ .Values.giteaStorage.config.type }}
-    datasetName: {{ .Values.giteaStorage.config.datasetName | default "" }}
-    hostPath: {{ .Values.giteaStorage.config.hostPath | default "" }}
+    type: {{ .Values.paperlessStorage.media.type }}
+    datasetName: {{ .Values.paperlessStorage.media.datasetName | default "" }}
+    hostPath: {{ .Values.paperlessStorage.media.hostPath | default "" }}
     targetSelector:
       gitea:
         gitea:
-          mountPath: /etc/gitea
+          mountPath: /usr/src/paperless/media
         01-permissions:
-          mountPath: /mnt/directories/config
+          mountPath: /mnt/directories/media
+  export:
+    enabled: true
+    type: {{ .Values.paperlessStorage.export.type }}
+    datasetName: {{ .Values.paperlessStorage.export.datasetName | default "" }}
+    hostPath: {{ .Values.paperlessStorage.export.hostPath | default "" }}
+    targetSelector:
+      gitea:
+        gitea:
+          mountPath: /usr/src/paperless/export
+        01-permissions:
+          mountPath: /mnt/directories/export
+  consume:
+    enabled: true
+    type: {{ .Values.paperlessStorage.consume.type }}
+    datasetName: {{ .Values.paperlessStorage.consume.datasetName | default "" }}
+    hostPath: {{ .Values.paperlessStorage.consume.hostPath | default "" }}
+    targetSelector:
+      gitea:
+        gitea:
+          mountPath: /usr/src/paperless/consume
+        01-permissions:
+          mountPath: /mnt/directories/consume
   gitea-temp:
     enabled: true
     type: emptyDir
@@ -104,7 +121,7 @@ persistence:
       gitea:
         gitea:
           mountPath: /tmp/gitea
-  {{ if .Values.giteaNetwork.certificateID }}
+  {{ if .Values.paperlessNetwork.certificateID }}
   cert:
     enabled: true
     type: secret

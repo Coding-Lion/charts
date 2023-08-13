@@ -5,7 +5,7 @@ workload:
     primary: true
     type: Deployment
     podSpec:
-      hostNetwork: {{ .Values.giteaNetwork.hostNetwork }}
+      hostNetwork: {{ .Values.paperlessNetwork.hostNetwork }}
       containers:
         gitea:
           enabled: true
@@ -28,24 +28,24 @@ workload:
           {{ end }}
           probes:
             {{ $protocol := "http" }}
-            {{ if .Values.giteaNetwork.certificateID }}
+            {{ if .Values.paperlessNetwork.certificateID }}
               {{ $protocol = "https" }}
             {{ end }}
             liveness:
               enabled: true
               type: {{ $protocol }}
               path: /api/healthz
-              port: {{ .Values.giteaNetwork.webPort }}
+              port: {{ .Values.paperlessNetwork.webPort }}
             readiness:
               enabled: true
               type: {{ $protocol }}
               path: /api/healthz
-              port: {{ .Values.giteaNetwork.webPort }}
+              port: {{ .Values.paperlessNetwork.webPort }}
             startup:
               enabled: true
               type: {{ $protocol }}
               path: /api/healthz
-              port: {{ .Values.giteaNetwork.webPort }}
+              port: {{ .Values.paperlessNetwork.webPort }}
       initContainers:
       {{- include "ix.v1.common.app.permissions" (dict "containerName" "01-permissions"
                                                         "UID" .Values.giteaRunAs.user
@@ -64,22 +64,22 @@ service:
       webui:
         enabled: true
         primary: true
-        port: {{ .Values.giteaNetwork.webPort }}
-        nodePort: {{ .Values.giteaNetwork.webPort }}
+        port: {{ .Values.paperlessNetwork.webPort }}
+        nodePort: {{ .Values.paperlessNetwork.webPort }}
         targetSelector: gitea
       ssh:
         enabled: true
-        port: {{ .Values.giteaNetwork.sshPort }}
-        nodePort: {{ .Values.giteaNetwork.sshPort }}
+        port: {{ .Values.paperlessNetwork.sshPort }}
+        nodePort: {{ .Values.paperlessNetwork.sshPort }}
         targetSelector: gitea
 
 {{/* Persistence */}}
 persistence:
   data:
     enabled: true
-    type: {{ .Values.giteaStorage.data.type }}
-    datasetName: {{ .Values.giteaStorage.data.datasetName | default "" }}
-    hostPath: {{ .Values.giteaStorage.data.hostPath | default "" }}
+    type: {{ .Values.paperlessStorage.data.type }}
+    datasetName: {{ .Values.paperlessStorage.data.datasetName | default "" }}
+    hostPath: {{ .Values.paperlessStorage.data.hostPath | default "" }}
     targetSelector:
       gitea:
         gitea:
@@ -88,9 +88,9 @@ persistence:
           mountPath: /mnt/directories/data
   config:
     enabled: true
-    type: {{ .Values.giteaStorage.config.type }}
-    datasetName: {{ .Values.giteaStorage.config.datasetName | default "" }}
-    hostPath: {{ .Values.giteaStorage.config.hostPath | default "" }}
+    type: {{ .Values.paperlessStorage.config.type }}
+    datasetName: {{ .Values.paperlessStorage.config.datasetName | default "" }}
+    hostPath: {{ .Values.paperlessStorage.config.hostPath | default "" }}
     targetSelector:
       gitea:
         gitea:
@@ -104,7 +104,7 @@ persistence:
       gitea:
         gitea:
           mountPath: /tmp/gitea
-  {{ if .Values.giteaNetwork.certificateID }}
+  {{ if .Values.paperlessNetwork.certificateID }}
   cert:
     enabled: true
     type: secret

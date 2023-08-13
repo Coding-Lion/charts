@@ -1,4 +1,4 @@
-giteaStorage:
+paperlessStorage:
   data:
     type: hostPath
     hostPath: /mnt/{{ .Release.Name }}/data
@@ -12,7 +12,7 @@ giteaStorage:
     type: hostPath
     hostPath: /mnt/{{ .Release.Name }}/pgBackup
 
-giteaNetwork:
+paperlessNetwork:
   certificateID: 1
   rootURL: https://gitea.example.com:30000
 

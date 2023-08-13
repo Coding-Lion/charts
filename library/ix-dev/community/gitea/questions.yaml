@@ -81,7 +81,7 @@ questions:
             default: 1000
             required: true
 
-  - variable: giteaNetwork
+  - variable: paperlessNetwork
     label: ""
     group: Network Configuration
     schema:
@@ -129,7 +129,7 @@ questions:
             $ref:
               - "definitions/certificate"
 
-  - variable: giteaStorage
+  - variable: paperlessStorage
     label: ""
     group: Storage Configuration
     schema:
