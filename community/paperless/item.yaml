@@ -1,7 +1,7 @@
-icon_url: https://gitea.com/assets/img/logo.svg
+icon_url: https://raw.githubusercontent.com/paperless-ngx/paperless-ngx/dev/resources/logo/web/svg/square.svg
 categories:
   - productivity
 screenshots:
-  - https://gitea.io/images/screenshot.png
+  - https://raw.githubusercontent.com/paperless-ngx/paperless-ngx/main/docs/assets/screenshots/documents-smallcards-dark.png#gh-dark-mode-only
 tags:
   - git
