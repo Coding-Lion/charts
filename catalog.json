@@ -1,7 +1,7 @@
 {
     "test": {},
     "community": {
-        "gitea": {
+        "paperless": {
             "app_readme": "Paperless",
             "categories": [
                 "productivity"
